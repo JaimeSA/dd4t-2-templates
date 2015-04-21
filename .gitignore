@@ -184,3 +184,6 @@ FakesAssemblies/
 
 !dependencies/*.dll
 !tools/**/*.exe
+tools/template-installer/do-install.bat
+tools/template-installer/data/DD4T.Templates.merged.dll
+tools/template-installer/dd4t-upload-config.xml

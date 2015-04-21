@@ -5,6 +5,7 @@ using Dynamic = DD4T.ContentModel;
 using TCM = Tridion.ContentManager.ContentManagement;
 using DD4T.Templates.Base.Utils;
 using Tridion.ContentManager.Templating;
+using DD4T.Templates.Base.Contracts;
 
 namespace DD4T.Templates.Base.Builder
 {
@@ -18,12 +19,12 @@ namespace DD4T.Templates.Base.Builder
             return fields;
         }
 
-        public static void AddFields(Dynamic.FieldSet fields, TCM.Fields.ItemFields tcmItemFields, BuildManager manager)
+        public static void AddFields(Dynamic.FieldSet fields, TCM.Fields.ItemFields tcmItemFields, IBuildManager manager)
         {
             AddFields(fields, tcmItemFields, manager.BuildProperties.LinkLevels, manager);
         }
 
-        public static void AddFields(Dynamic.FieldSet fields, TCM.Fields.ItemFields tcmItemFields, int currentLinkLevel, BuildManager manager)
+        public static void AddFields(Dynamic.FieldSet fields, TCM.Fields.ItemFields tcmItemFields, int currentLinkLevel, IBuildManager manager)
         {
             foreach (TCM.Fields.ItemField tcmItemField in tcmItemFields)
             {

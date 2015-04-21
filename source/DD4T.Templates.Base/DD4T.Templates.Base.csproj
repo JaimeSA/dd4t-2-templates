@@ -103,6 +103,7 @@
     <Compile Include="Builder\PublicationBuilder.cs" />
     <Compile Include="Builder\SchemaBuilder.cs" />
     <Compile Include="Builder\TargetGroupBuilder.cs" />
+    <Compile Include="Contracts\IBuildManager.cs" />
     <Compile Include="DefaultTemplate.cs" />
     <Compile Include="Properties\SpecificAssemblyInfo.cs" />
     <Compile Include="StopChainException.cs" />
