@@ -2,17 +2,18 @@
 using Dynamic = DD4T.ContentModel;
 using Tridion.ContentManager.ContentManagement;
 using System;
+using DD4T.Templates.Base.Contracts;
 
 namespace DD4T.Templates.Base.Builder
 {
     public class KeywordBuilder
     {
-        public static Dynamic.Keyword BuildKeyword(Keyword keyword, BuildManager buildManager)
+        public static Dynamic.Keyword BuildKeyword(Keyword keyword, IBuildManager buildManager)
         {
             return BuildKeyword(keyword, 2, buildManager);
         }
 
-        public static Dynamic.Keyword BuildKeyword(Keyword keyword, int currentLinkLevel, BuildManager buildManager)
+        public static Dynamic.Keyword BuildKeyword(Keyword keyword, int currentLinkLevel, IBuildManager buildManager)
         {
             Dynamic.Keyword dk = new Dynamic.Keyword();
             dk.Id = keyword.Id;

@@ -3,8 +3,12 @@ using DD4T.Serialization;
 using DD4T.Templates.Base.Builder;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using Tridion.ContentManager.Templating;
 using Tridion.ContentManager.Templating.Assembly;
+using DD4T.Templates.Base.Contracts;
 
 namespace DD4T.Templates.Base
 {
@@ -101,15 +105,23 @@ namespace DD4T.Templates.Base
         protected Package Package { get; set; }
         protected Engine Engine { get; set; }
 
-        private BuildManager _buildManager = null;
-        public BuildManager Manager
+        private IBuildManager _buildManager = null;
+        public IBuildManager Manager
         {
             get
             {
+                
                 if (_buildManager == null)
                 {
                     _buildManager = new BuildManager(Package, Engine);
+                    
+                    var bm = CheckOverride();
+                    if (bm != null)
+                    {
+                        _buildManager = bm;
+                    }
                     _buildManager.SerializerService = SerializerService;
+                    
                 }
                 return _buildManager;
             }
@@ -134,6 +146,60 @@ namespace DD4T.Templates.Base
         }
 
         public static string DD4TContextVariableKey = "RenderedByDD4T";
+
+        public IBuildManager CheckOverride()
+        {
+            String className = Package.GetValue("CustomBuildManager.Class");
+            Log.Debug("Checking Override...");
+            if (!String.IsNullOrEmpty(className))
+            {
+                Log.Debug("Loading object " + className);
+                DD4T.Templates.Base.Contracts.IBuildManager bm=null;
+                try
+                {
+                        
+                    //Assembly customDll = Assembly.Load(ms.ToArray());
+                    Type type = Type.GetType(className);
+                    if (type != null)
+                    {
+                        bm = Activator.CreateInstance(type) as DD4T.Templates.Base.Contracts.IBuildManager;
+                        if (bm != null)
+                        {
+                            Log.Info("Using Build Manager: " + bm.GetType().Name);
+                            bm.Initialize(Package, Engine);
+                        }
+                        else
+                        {
+                            Log.Warning("Build Manager is null: " + className);
+                        }
+                    }
+                    else
+                    {
+                        Log.Warning("Class Not found: " + className);
+                    }
+                        
+                }
+                catch (Exception ex)
+                {
+                    if (ex is System.Reflection.ReflectionTypeLoadException)
+                    {
+                        var typeLoadException = ex as ReflectionTypeLoadException;
+                        var loaderExceptions = typeLoadException.LoaderExceptions;
+                        Log.Error(typeLoadException.Message);
+                        foreach (var e in loaderExceptions)
+                        {
+                            Log.Error(e.Message);
+                        }
+                    }
+                    else
+                    {
+                        Log.Error(ex.Message);
+                    }
+                }
+                return bm;
+            }
+            return null;
+        }
     }
 
 

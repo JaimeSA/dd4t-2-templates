@@ -9,6 +9,7 @@ using Tridion.ContentManager.Templating;
 using DD4T.ContentModel.Contracts.Serializing;
 using DD4T.Templates.Base.Utils;
 using DD4T.ContentModel;
+using DD4T.Templates.Base.Contracts;
 
 namespace DD4T.Templates.Base.Builder
 {
@@ -16,22 +17,23 @@ namespace DD4T.Templates.Base.Builder
     /// Class serves as reference point to all builders, allowing subclasses of the BuildManager to override
     /// specific points of implementation. In a way, this class provides a poor man's dependency injection.
     /// </summary>
-    public class BuildManager
+    public class BuildManager: IBuildManager
     {
         // I think this should go! (qs)
-        //public BuildManager()
-        //{
-        //    BuildProperties = new BuildProperties(null);
-        //}
+        // I need it for dynamic loads (jsa)
+        public BuildManager()
+        {
+            //But this can go! (jsa)
+            //BuildProperties = new BuildProperties(null);
+        }
         public BuildManager (Package package, Engine engine)
         {
             BuildProperties = new BuildProperties(package);
-            BinaryPublisher = new BinaryPublisher(package, engine);
+            _binaryPublisher = new BinaryPublisher(package, engine);
         }
-        protected BinaryPublisher BinaryPublisher
-        {
-            get; set;
-        }
+
+        
+        protected BinaryPublisher _binaryPublisher;
 
         public BuildProperties BuildProperties { get; set; }
         public ISerializerService SerializerService { get; set; }
@@ -128,12 +130,25 @@ namespace DD4T.Templates.Base.Builder
 
         public virtual string PublishMultimediaComponent(Component component)
         {
-            return BinaryPublisher.PublishMultimediaComponent(component.Id, BuildProperties);
+            return _binaryPublisher.PublishMultimediaComponent(component.Id, BuildProperties);
         }
 
         public virtual string PublishBinariesInRichTextField(string v)
         {
-            return BinaryPublisher.PublishBinariesInRichTextField(v, BuildProperties);
+            return _binaryPublisher.PublishBinariesInRichTextField(v, BuildProperties);
+        }
+
+        BinaryPublisher IBuildManager.BinaryPublisher
+        {
+            get { return _binaryPublisher; }
+            set { _binaryPublisher = value; }
+        }
+
+
+        public virtual void Initialize(Package p, Engine e)
+        {
+            BuildProperties = new BuildProperties(p);
+            _binaryPublisher = new BinaryPublisher(p, e);
         }
     }
 }

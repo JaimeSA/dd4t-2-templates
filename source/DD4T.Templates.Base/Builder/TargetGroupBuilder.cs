@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DD4T.ContentModel;
+using DD4T.Templates.Base.Contracts;
 using DD4T.Templates.Base.Utils;
 using Tridion.ContentManager.AudienceManagement;
 using Condition = DD4T.ContentModel.Condition;
@@ -25,7 +26,7 @@ namespace DD4T.Templates.Base.Builder
         /// <summary>
         /// Build a DD4T Target group from a AM Target Group
         /// </summary>
-        public static Dynamic.TargetGroup BuildTargetGroup(Tridion.ContentManager.AudienceManagement.TargetGroup targetGroup, BuildManager buildManager)
+        public static Dynamic.TargetGroup BuildTargetGroup(Tridion.ContentManager.AudienceManagement.TargetGroup targetGroup, IBuildManager buildManager)
         {
             var tg = new Dynamic.TargetGroup
             {
@@ -43,7 +44,7 @@ namespace DD4T.Templates.Base.Builder
         /// <summary>
         /// Map the conditions from a Component Presentaton to DD4T conditions
         /// </summary>
-        public static List<Dynamic.Condition> MapTargetGroupConditions(IList<Tcm.TargetGroupCondition> componentPresentationConditions, BuildManager buildManager)
+        public static List<Dynamic.Condition> MapTargetGroupConditions(IList<Tcm.TargetGroupCondition> componentPresentationConditions, IBuildManager buildManager)
         {
             var mappedConditions = new List<Dynamic.Condition>();
             foreach (var componentPresentationCondition in componentPresentationConditions)
@@ -53,7 +54,7 @@ namespace DD4T.Templates.Base.Builder
             return mappedConditions;
         }
 
-        private static List<Condition> MapConditions(IList<Tridion.ContentManager.AudienceManagement.Condition> conditions, BuildManager buildManager)
+        private static List<Condition> MapConditions(IList<Tridion.ContentManager.AudienceManagement.Condition> conditions, IBuildManager buildManager)
         {
             var mappedConditions = new List<Dynamic.Condition>();
             foreach (var condition in conditions)
@@ -90,7 +91,7 @@ namespace DD4T.Templates.Base.Builder
             return newCondition;
         }
 
-        private static Dynamic.TargetGroupCondition MapTargetGroupCondition(Tcm.TargetGroupCondition targetGroupCondition, BuildManager buildManager)
+        private static Dynamic.TargetGroupCondition MapTargetGroupCondition(Tcm.TargetGroupCondition targetGroupCondition, IBuildManager buildManager)
         {
             var newCondition = new Dynamic.TargetGroupCondition()
                                    {
@@ -100,7 +101,7 @@ namespace DD4T.Templates.Base.Builder
             return newCondition;
         }
 
-        private static KeywordCondition MapTrackingKeyCondition(TrackingKeyCondition trackingKeyCondition, BuildManager buildManager)
+        private static KeywordCondition MapTrackingKeyCondition(TrackingKeyCondition trackingKeyCondition, IBuildManager buildManager)
         {
             var newCondition = new KeywordCondition
                                    {

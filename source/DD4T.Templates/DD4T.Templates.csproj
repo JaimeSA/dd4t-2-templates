@@ -80,6 +80,7 @@
     <Compile Include="InheritMetadataComponent.cs" />
     <Compile Include="InheritMetadataPage.cs" />
     <Compile Include="MinimizeXML.cs" />
+    <Compile Include="Override.cs" />
     <Compile Include="PreviewPage.cs" />
     <Compile Include="Properties\SpecificAssemblyInfo.cs" />
     <Compile Include="PublishBinariesComponent.cs" />
@@ -111,6 +112,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Schemas\Dynamic Delivery Parameters.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Schemas\Override DD4T Behavior.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
